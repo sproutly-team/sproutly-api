@@ -3,7 +3,7 @@ const bodyParser = require('body-parser')
 const Sentry = require("@sentry/node");
 const dotenv = require("dotenv-safe");
 
-dotenv.config({});
+dotenv.config();
 const app = express()
 const port = process.env.PORT || 3000;
 
