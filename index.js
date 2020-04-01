@@ -3,7 +3,9 @@ const bodyParser = require('body-parser')
 const Sentry = require("@sentry/node");
 const dotenv = require("dotenv-safe");
 
-dotenv.config();
+dotenv.config({
+  allowEmptyValues: true
+});
 const app = express()
 const port = 3000
 
