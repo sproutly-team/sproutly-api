@@ -9,7 +9,7 @@ const config = require(__dirname + '/../../config/config.json')[env];
 const db = {};
 const dotenv = require("dotenv-safe");
 
-dotenv.config({ allowEmptyValues: true });
+dotenv.config();
 let sequelize;
 if (config.use_env_variable) {
   sequelize = new Sequelize(process.env[config.use_env_variable], config);
