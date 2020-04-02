@@ -12,7 +12,7 @@ const db = require('./config/queries');
 Sentry.init({
   dsn: process.env.SENTRY_URL
 });
-var whitelist = ["http://example1.com", "http://example2.com"];
+var whitelist = ["https://sproutly.netlify.com"];
 var corsOptions = {
   origin: function(origin, callback) {
     if (whitelist.indexOf(origin) !== -1) {
