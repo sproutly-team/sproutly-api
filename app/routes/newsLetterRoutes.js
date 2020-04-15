@@ -2,7 +2,6 @@ const express = require("express");
 const router = express.Router();
 const newsLetter = require('../controllers/newsLetterController');
 
-
 // newsLetter Routes
 
 router.post("/save", newsLetter.saveNewEmail);

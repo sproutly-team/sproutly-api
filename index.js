@@ -3,6 +3,7 @@ const bodyParser = require('body-parser')
 const Sentry = require("@sentry/node");
 const dotenv = require("dotenv-safe");
 const cors = require("cors");
+const router = require("./app/routes");
 
 dotenv.config();
 const app = express()
@@ -22,14 +23,13 @@ app.use(
 )
 
 // app.use('/api', apiRouter)
-const router = require("./app/routes");
 
 app.use("/api/v1/newsletter", router.newsLetter);
+app.use("/api/v1/users", router.users);
 app.get('/', (request, response) => {
     response.json({ info: 'Node.js, Express, and Postgres API' })
   })
 
-app.get('/users', db.getUsers)
 
 app.listen(port, () => {
     console.log(`App running on port ${port}.`)
