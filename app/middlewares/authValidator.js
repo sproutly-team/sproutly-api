@@ -23,10 +23,8 @@ class validate {
     const passwordLength = checkLength(req.body.password, 5)
     const matchingPasswords = req.body.password == req.body.confirmPassword
 
-    if (!validEmail) return errorResponse(res, "", codes.BAD_REQUEST, errorMessages.INVALID_INPUT_PARAMS)
-    if (!emptyfirstName) return errorResponse(res, "", codes.BAD_REQUEST, errorMessages.INVALID_INPUT_PARAMS)
-    if (!emptyLastName) return errorResponse(res, "", codes.BAD_REQUEST, errorMessages.INVALID_INPUT_PARAMS)
-    if (!emptyUsername) return errorResponse(res, "", codes.BAD_REQUEST, errorMessages.INVALID_INPUT_PARAMS)
+    if (!validEmail) return errorResponse(res, "", codes.BAD_REQUEST, errorMessages.INVALID_EMAIL)
+    if (!emptyfirstName || !emptyLastName || !emptyUsername) return errorResponse(res, "", codes.BAD_REQUEST, errorMessages.INVALID_INPUT_PARAMS)
     if (!emptyPassword) return errorResponse(res, "", codes.BAD_REQUEST, errorMessages.INVALID_PASSWORD)
     if (!emptyVerifyPassword) return errorResponse(res, "", codes.BAD_REQUEST, errorMessages.CONFIRM_PASSWORD)
     if (!passwordLength) return errorResponse(res, "", codes.BAD_REQUEST, errorMessages.PASSWORD_TOO_SHORT)
