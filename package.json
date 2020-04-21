@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index"
+    "start": "nodemon --delay 3 index.js",
+    "db:migration": "sequelize db:migrate"
   },
   "repository": {
     "type": "git",
@@ -20,10 +21,12 @@
   "homepage": "https://github.com/ObieWalker/sproutly-backend#readme",
   "dependencies": {
     "@sentry/node": "^5.15.2",
+    "bcrypt": "^4.0.1",
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
     "dotenv-safe": "^8.2.0",
     "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
     "pg": "^7.18.2",
     "pg-hstore": "^2.3.3",
     "sequelize": "^5.21.5",
