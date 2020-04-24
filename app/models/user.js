@@ -17,6 +17,9 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false
     },
+    // passcode: {
+    //   type: DataTypes.INTEGER,
+    // },
     email: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -25,10 +28,37 @@ module.exports = (sequelize, DataTypes) => {
           msg: 'Not a valid email'
         }
       }
+    },
+    companyId: {
+      type: DataTypes.INTEGER,
+      references: {
+        model: 'Companies',
+        key: 'id',
+        as: 'companyId'
+      }
+    },
+    activated: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false
+    },
+    activationToken: {
+      type: DataTypes.STRING
+    },
+    isAdmin: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false
+    },
+    leaveDays: {
+      type: DataTypes.INTEGER,
     }
   });
 
   User.associate = (models) => {
+    User.belongsTo(models.Company, {
+      foreignKey: 'companyId',
+      as: 'company'
+    })
 
   };
   return User;
