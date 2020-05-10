@@ -1,0 +1,14 @@
+const service = {
+  randomGenerator(length) {
+    const arr = [2, 3, 4, 5, 6, 7, 8, 9]
+    let i = 0
+    let n = ''
+    while (i < length) {
+      n += arr[Math.floor(Math.random() * arr.length)]
+      i += 1
+    }
+    return n
+  }
+}
+
+module.exports = service

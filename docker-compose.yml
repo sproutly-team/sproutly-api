@@ -1,0 +1,25 @@
+version: '3'
+services:
+  web:
+    build:
+      context: .
+    command: npm start
+    volumes:
+      - .:/usr/app/
+      - /usr/app/node_modules
+    ports:
+      - '4000:4000'
+    depends_on:
+      - db
+    environment: 
+      DB_HOST: db
+  db:
+    build:
+      context: _deployment/postgres
+    environment:
+      POSTGRES_USER: theo
+      POSTGRES_DB: sproutly
+
+    ports:
+      - 5432:5432
+      
