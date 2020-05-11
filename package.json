@@ -4,7 +4,7 @@
   "description": "API Backend for Sproutly",
   "repository": {
     "type": "git",
-    "url": "https://github.com/sahat/hackathon-starter.git"
+    "url": "https://github.com/sproutly-team/sproutly-api.git"
   },
   "license": "MIT",
   "author": "Idakwoji Theophilus",
