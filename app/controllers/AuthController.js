@@ -1,4 +1,5 @@
 const ResponseService = require('../services/ResponseService')
+const NotificationService = require('../services/NotificationService')
 const UtilService = require('../services/UtilService')
 
 const EntityExistsError = require('../errors/EntityExistsError')
@@ -51,7 +52,8 @@ const controller = {
 
       await UserToken.create(tokenDetails)
 
-      // todo (send notifications)
+      const { firstname, email } = newUser
+      await NotificationService.newSignup({ email, firstname, code: authToken })
 
       return ResponseService.json(res, 200, 'Successfully Signed Up', newUser)
     } catch (err) {
