@@ -188,8 +188,8 @@ data "template_file" "sproutlyapp" {
     app_port           = var.app_port
     db_port            = aws_db_instance.postgresql.port
     db_host            = aws_db_instance.postgresql.address
-    db_user            = data.aws_secretsmanager_secret_version.db.username)
-    db_password        = data.aws_secretsmanager_secret_version.db.password)
+    db_user            = data.aws_secretsmanager_secret_version.db.username
+    db_password        = data.aws_secretsmanager_secret_version.db.password
   }
 }
 
