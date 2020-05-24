@@ -65,3 +65,7 @@ jobs:
       - name: Terraform Plan
         working-directory: ./_deployment/terraform/envs/staging
         run: terraform plan
+
+      - name: Terraform Apply
+        working-directory: ./_deployment/terraform/envs/staging
+        run: terraform apply -auto-approve
