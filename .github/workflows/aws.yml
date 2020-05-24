@@ -42,8 +42,7 @@ jobs:
       - name: View
         run: echo "Aws key -> $KEY"
         env:
-            KEY: ${{ secrets }}
-         
+            KEY: ${{ secrets.AWS_ACCESS_KEY_ID }}
        
   
       - name: Configure AWS credentials
