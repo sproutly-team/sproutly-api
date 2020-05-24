@@ -14,8 +14,8 @@
       },
       "portMappings": [
         {
-          "containerPort": "${app_port}",
-          "hostPort": "${app_port}",
+          "containerPort": "4000",
+          "hostPort": "4000",
           "protocol": "tcp"
         }
       ]
