@@ -9,8 +9,8 @@ const controller = {
   healthcheck(req, res) {
     return ResponseService.json(res, 200, 'up')
   },
-  zz(req, res) {
-    return ResponseService.json(res, 200, 'zzz')
+  yy(req, res) {
+    return ResponseService.json(res, 200, 'yyy')
   },
   /**
    * @api {post} /api/signup Signup user
