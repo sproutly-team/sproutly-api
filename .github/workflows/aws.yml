@@ -46,6 +46,8 @@ jobs:
           aws-region: eu-west-2
 
       - name: Build Image
+        env:
+            CI_SERVER: 'yes'
         run: make build env=staging
 
       - name: Setup Terraform
