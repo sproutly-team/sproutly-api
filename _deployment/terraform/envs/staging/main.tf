@@ -169,20 +169,20 @@ resource "aws_ecs_cluster" "staging" {
   name = var.cluster_name
 }
 
-data "template_file" "sproutlyapp" {
-  template   = file("./sproutlyapp.json.tpl")
-  depends_on = [aws_db_instance.postgresql]
+# data "template_file" "sproutlyapp" {
+#   template   = file("./sproutlyapp.json.tpl")
 
-  vars = {
-    aws_ecr_repository = aws_ecr_repository.repo.repository_url
-    tag                = var.tag
-    app_port           = var.app_port
-    db_port            = aws_db_instance.postgresql.port
-    db_host            = aws_db_instance.postgresql.address
-    db_user            = var.rds-username
-    db_password        = var.rds-password
-  }
-}
+
+#   vars = {
+#     aws_ecr_repository = aws_ecr_repository.repo.repository_url
+#     tag                = var.tag
+#     app_port           = var.app_port
+#     db_port            = aws_db_instance.postgresql.port
+#     db_host            = aws_db_instance.postgresql.address
+#     db_user            = var.rds-username
+#     db_password        = var.rds-password
+#   }
+# }
 
 resource "aws_ecs_task_definition" "service" {
   family                   = "sproutlyapi-staging"
@@ -195,7 +195,17 @@ resource "aws_ecs_task_definition" "service" {
     Environment = "staging"
     Application = "sproutlyapi"
   }
-  container_definitions = data.template_file.sproutlyapp.rendered
+
+  depends_on = [aws_db_instance.postgresql]
+  container_definitions = templatefile("./sproutlyapp.json", {
+    aws_ecr_repository = aws_ecr_repository.repo.repository_url
+    tag                = var.tag
+    app_port           = var.app_port
+    db_port            = aws_db_instance.postgresql.port
+    db_host            = aws_db_instance.postgresql.address
+    db_user            = var.rds-username
+    db_password        = var.rds-password
+  })
 }
 
 
