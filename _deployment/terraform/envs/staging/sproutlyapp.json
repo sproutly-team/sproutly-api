@@ -13,8 +13,8 @@
     },
     "portMappings": [
       {
-        "containerPort": ${app_port},
-        "hostPort": ${app_port},
+        "containerPort": "${app_port}",
+        "hostPort": "${app_port}",
         "protocol": "tcp"
       }
     ],
@@ -28,21 +28,9 @@
         "name": "PORT",
         "value": "4000"
       },
-       {
-        "name": "DB_HOST",
-        "value": "${db_host}"
-      },
-       {
-        "name": "DB_PORT",
-        "value": "${db_port}"
-      },
       {
-        "name": "DB_PASSWORD",
-        "value": "${db_password}"
-      },
-      {
-        "name": "DB_USER",
-        "value": "${db_user}"
+        "name": "DB",
+        "valueFrom": "arn:aws:secretsmanager:eu-west-2:069127369227:secret:sproutly/staging/database-qTh79J"
       }
     ],
     "ulimits": [
