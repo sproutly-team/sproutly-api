@@ -201,6 +201,7 @@ resource "aws_ecs_task_definition" "service" {
   cpu                      = 256
   memory                   = 2048
   requires_compatibilities = ["FARGATE"]
+  container_definitions = data.template_file.sproutlyapp.rendered
   tags = {
     Environment = "staging"
     Application = "sproutlyapi"
