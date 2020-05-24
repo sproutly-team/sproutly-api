@@ -1,9 +1,9 @@
-/node_modules
+/node_modules/
 .env
-/coverage
+/coverage/
 npm-debug.log
-/.nyc_output
-/_deployment/terraform/envs/staging/.terraform
+/.nyc_output/
+/_deployment/terraform/envs/staging/.terraform/
 /_deployment/terraform/envs/staging/.terraformrc
 
 terraform.tfvars

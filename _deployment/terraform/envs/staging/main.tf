@@ -1,0 +1,303 @@
+provider "aws" {
+}
+
+
+terraform {
+  backend "remote" {
+    hostname     = "app.terraform.io"
+    organization = "sproutly-team"
+
+    workspaces {
+      name = "sproutly-api"
+    }
+  }
+}
+
+data "aws_vpc" "default" {
+  default = true
+}
+
+
+data "aws_subnet_ids" "default" {
+  vpc_id = data.aws_vpc.default.id
+}
+
+resource "aws_cloudwatch_log_group" "sproutlyapi" {
+  name = "awslogs-sproutlyapi-staging"
+
+  tags = {
+    Environment = "staging"
+    Application = "sproutlyapi"
+  }
+}
+
+# ALB Security Group: Edit to restrict access to the application
+resource "aws_security_group" "lb" {
+  name        = "sproutly-staging-lb-sg"
+  description = "controls access to the ALB"
+
+  ingress {
+    protocol    = "tcp"
+    from_port   = var.http_port
+    to_port     = var.http_port
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    protocol    = "-1"
+    from_port   = 0
+    to_port     = 0
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+
+# Traffic to the ECS cluster should only come from the ALB
+resource "aws_security_group" "ecs_tasks" {
+  name        = "sproutly-staging-ecs-tasks-sg"
+  description = "allow inbound access from the ALB only"
+
+  ingress {
+    protocol        = "tcp"
+    from_port       = var.app_port
+    to_port         = var.app_port
+    cidr_blocks     = ["0.0.0.0/0"]
+    security_groups = [aws_security_group.lb.id]
+  }
+
+  egress {
+    protocol    = "-1"
+    from_port   = 0
+    to_port     = 0
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+
+resource "aws_security_group" "rds-sg" {
+  name        = "sproutly-staging-rds-sg"
+  description = "controls access to the RDS DB"
+
+  ingress {
+    protocol    = "tcp"
+    from_port   = var.rds-port
+    to_port     = var.rds-port
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    protocol    = "-1"
+    from_port   = 0
+    to_port     = 0
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+
+resource "aws_lb" "staging" {
+  name               = "sproutly-staging-alb"
+  subnets            = data.aws_subnet_ids.default.ids
+  load_balancer_type = "application"
+  security_groups    = [aws_security_group.lb.id]
+
+  tags = {
+    Environment = "staging"
+    Application = "sproutlyapi"
+  }
+}
+
+resource "aws_lb_listener" "https_forward" {
+  load_balancer_arn = aws_lb.staging.arn
+  port              = var.http_port
+  protocol          = "HTTP"
+  # ssl_policy        = "ELBSecurityPolicy-2016-08"
+  # certificate_arn   = "arn:aws:acm:us-west-2:847883372847:certificate/e2600002-ecb4-4298-82e1-9f9d3a2f9ba1"
+
+  default_action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.staging.arn
+  }
+}
+
+
+resource "aws_lb_target_group" "staging" {
+  name        = "sproutly-staging-alb-tg"
+  port        = var.http_port
+  protocol    = "HTTP"
+  vpc_id      = data.aws_vpc.default.id
+  target_type = "ip"
+
+  health_check {
+    healthy_threshold   = "3"
+    interval            = "90"
+    protocol            = "HTTP"
+    matcher             = "200-299"
+    timeout             = "20"
+    path                = var.health_check_path
+    unhealthy_threshold = "2"
+  }
+}
+
+
+
+// IAM Roles
+data "aws_iam_policy_document" "ecs_task_execution_role" {
+  version = "2012-10-17"
+  statement {
+    sid     = ""
+    effect  = "Allow"
+    actions = ["sts:AssumeRole"]
+
+    principals {
+      type        = "Service"
+      identifiers = ["ecs-tasks.amazonaws.com"]
+    }
+  }
+}
+
+# ECS task execution role
+resource "aws_iam_role" "ecs_task_execution_role" {
+  name               = var.ecs_task_execution_role_name
+  assume_role_policy = data.aws_iam_policy_document.ecs_task_execution_role.json
+}
+
+# ECS task execution role policy attachment
+resource "aws_iam_role_policy_attachment" "ecs_task_execution_role" {
+  role       = aws_iam_role.ecs_task_execution_role.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
+}
+
+
+resource "aws_ecs_cluster" "staging" {
+  name = var.cluster_name
+}
+
+data "template_file" "sproutlyapp" {
+  template   = file("./sproutlyapp.json.tpl")
+  depends_on = [aws_db_instance.postgresql]
+
+  vars = {
+    aws_ecr_repository = aws_ecr_repository.repo.repository_url
+    tag                = var.tag
+    app_port           = var.app_port
+    db_port            = aws_db_instance.postgresql.port
+    db_host            = aws_db_instance.postgresql.address
+    db_user            = var.rds-username
+    db_password        = var.rds-password
+  }
+}
+
+resource "aws_ecs_task_definition" "service" {
+  family                   = "sproutlyapi-staging"
+  network_mode             = "awsvpc"
+  execution_role_arn       = aws_iam_role.ecs_task_execution_role.arn
+  cpu                      = 256
+  memory                   = 2048
+  requires_compatibilities = ["FARGATE"]
+  tags = {
+    Environment = "staging"
+    Application = "sproutlyapi"
+  }
+  container_definitions = data.template_file.sproutlyapp.rendered
+}
+
+
+resource "aws_ecs_service" "staging" {
+  name            = "staging"
+  cluster         = aws_ecs_cluster.staging.id
+  task_definition = aws_ecs_task_definition.service.arn
+  desired_count   = 1
+  launch_type     = "FARGATE"
+
+  network_configuration {
+    security_groups  = [aws_security_group.ecs_tasks.id]
+    subnets          = data.aws_subnet_ids.default.ids
+    assign_public_ip = true
+  }
+
+  load_balancer {
+    target_group_arn = aws_lb_target_group.staging.arn
+    container_name   = "sproutlyapi"
+    container_port   = var.app_port
+  }
+
+  depends_on = [aws_lb_listener.https_forward, aws_iam_role_policy_attachment.ecs_task_execution_role]
+
+  tags = {
+    Environment = "staging"
+    Application = "sproutlyapi"
+  }
+}
+
+
+
+resource "aws_ecr_repository" "repo" {
+  name = var.image_name
+}
+
+resource "aws_ecr_lifecycle_policy" "repo-policy" {
+  repository = aws_ecr_repository.repo.name
+
+  policy = <<EOF
+{
+  "rules": [
+    {
+      "rulePriority": 1,
+      "description": "Keep image deployed with tag ${var.tag}",
+      "selection": {
+        "tagStatus": "tagged",
+        "tagPrefixList": ["${var.tag}"],
+        "countType": "imageCountMoreThan",
+        "countNumber": 1
+      },
+      "action": {
+        "type": "expire"
+      }
+    },
+    {
+      "rulePriority": 2,
+      "description": "Keep last 2 any images",
+      "selection": {
+        "tagStatus": "any",
+        "countType": "imageCountMoreThan",
+        "countNumber": 2
+      },
+      "action": {
+        "type": "expire"
+      }
+    }
+  ]
+}
+EOF
+}
+
+
+resource "aws_db_instance" "postgresql" {
+  allocated_storage      = 20
+  storage_type           = "gp2"
+  engine                 = "postgres"
+  engine_version         = "11.6"
+  instance_class         = "db.t2.micro"
+  name                   = "sproutly"
+  username               = var.rds-username
+  password               = var.rds-password
+  vpc_security_group_ids = [aws_security_group.rds-sg.id]
+}
+
+
+# data "external" "hash" {
+#   program = ["${coalesce(var.hash_script, "${path.module}/hash.sh")}", "${var.source_path}"]
+# }
+
+# # Build and push the Docker image whenever the hash changes
+# resource "null_resource" "push" {
+#   triggers = {
+#     hash = lookup(data.external.hash.result, "hash")
+#   }
+
+#   provisioner "local-exec" {
+#     command     = "${coalesce(var.push_script, "${path.module}/push.sh")} ${var.source_path} ${aws_ecr_repository.repo.repository_url} ${var.tag}"
+#     interpreter = ["bash", "-c"]
+#   }
+# }
+
+
+
+
