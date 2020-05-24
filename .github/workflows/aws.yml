@@ -51,12 +51,12 @@ jobs:
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
         with:
-          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+          cli_config_credentials_token: ${{ secrets.TF_API_KEY }}
 
       # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
 
       - name: Terraform Move Cred
-        run: echo "credentials \"app.terraform.io\" { token = \""${{ secrets.TF_API_TOKEN }}"\" }" > $HOME/.terraformrc
+        run: echo "credentials \"app.terraform.io\" { token = \""${{ secrets.TF_API_KEY }}"\" }" > $HOME/.terraformrc
 
       - name: Terraform Init
         working-directory: ./_deployment/terraform/envs/staging
