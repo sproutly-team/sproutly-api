@@ -22,6 +22,15 @@ data "aws_subnet_ids" "default" {
   vpc_id = data.aws_vpc.default.id
 }
 
+
+data "aws_secretsmanager_secret" "db" {
+  arn = "arn:aws:secretsmanager:eu-west-2:069127369227:secret:sproutly/staging/database-qTh79J"
+}
+
+data "aws_secretsmanager_secret_version" "db" {
+  secret_id = "${data.aws_secretsmanager_secret.db.id}"
+}
+
 resource "aws_cloudwatch_log_group" "sproutlyapi" {
   name = "awslogs-sproutlyapi-staging"
 
@@ -169,20 +178,21 @@ resource "aws_ecs_cluster" "staging" {
   name = var.cluster_name
 }
 
-# data "template_file" "sproutlyapp" {
-#   template   = file("./sproutlyapp.json.tpl")
+data "template_file" "sproutlyapp" {
+  template = file("./sproutlyapp.json.tpl")
 
+  depends_on = [aws_db_instance.postgresql]
+  vars = {
+    aws_ecr_repository = aws_ecr_repository.repo.repository_url
+    tag                = var.tag
+    app_port           = var.app_port
+    db_port            = aws_db_instance.postgresql.port
+    db_host            = aws_db_instance.postgresql.address
+    db_user            = jsondecode(data.aws_secretsmanager_secret_version.db)["username"]
+    db_password        = jsondecode(data.aws_secretsmanager_secret_version.db)["password"]
+  }
+}
 
-#   vars = {
-#     aws_ecr_repository = aws_ecr_repository.repo.repository_url
-#     tag                = var.tag
-#     app_port           = var.app_port
-#     db_port            = aws_db_instance.postgresql.port
-#     db_host            = aws_db_instance.postgresql.address
-#     db_user            = var.rds-username
-#     db_password        = var.rds-password
-#   }
-# }
 
 resource "aws_ecs_task_definition" "service" {
   family                   = "sproutlyapi-staging"
@@ -195,17 +205,6 @@ resource "aws_ecs_task_definition" "service" {
     Environment = "staging"
     Application = "sproutlyapi"
   }
-
-  depends_on = [aws_db_instance.postgresql]
-  container_definitions = templatefile("./sproutlyapp.json", {
-    aws_ecr_repository = aws_ecr_repository.repo.repository_url
-    tag                = var.tag
-    app_port           = var.app_port
-    db_port            = aws_db_instance.postgresql.port
-    db_host            = aws_db_instance.postgresql.address
-    db_user            = var.rds-username
-    db_password        = var.rds-password
-  })
 }
 
 

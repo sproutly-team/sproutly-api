@@ -56,6 +56,6 @@ node:
 	docker build -f ./Dockerfile -t ${NODE_RUNNER} .
 	docker tag ${NODE_RUNNER} app/runner
 	$(call push_image,${NODE_RUNNER})
-	$(shell echo "::set-output name=image::$NODE_RUNNER")
+
 
 
