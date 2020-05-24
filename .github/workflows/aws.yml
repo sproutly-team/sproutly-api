@@ -23,22 +23,21 @@
 #    See the documentation for each action used below for the recommended IAM policies for this IAM user,
 #    and best practices on handling the access key credentials.
 on:
-    push:
-        branches:
-            - dev
+  push:
+    branches:
+      - dev
 
 name: Deploy to Amazon ECS
 
 jobs:
-    deploy:
-      name: Deploy
-      runs-on: ubuntu-latest
-  
-      steps:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
 
+    steps:
       - name: Checkout
-        uses: actions/checkout@v2       
-  
+        uses: actions/checkout@v2
+
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -48,19 +47,21 @@ jobs:
 
       - name: Build Image
         run: make build env=staging
-          
-  
+
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
         with:
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
-  
+
       # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
+
+      - name: Terraform Move Cred
+        run: echo "credentials \"app.terraform.io\" { token = \""${{ secrets.TF_API_TOKEN }}"\" }" > $HOME/.terraformrc
 
       - name: Terraform Init
         working-directory: ./_deployment/terraform/envs/staging
         run: terraform init
-  
+
       # Checks that all Terraform configuration files adhere to a canonical format
       - name: Terraform Format
         working-directory: ./_deployment/terraform/envs/staging
