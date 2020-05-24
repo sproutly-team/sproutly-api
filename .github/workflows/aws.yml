@@ -42,7 +42,7 @@ jobs:
       - name: View
         run: echo "Aws key -> $KEY"
         env:
-             KEY: ${{ secrets.AWS_ACCESS_KEY_ID }}
+            KEY: ${{ secrets }}
          
        
   
