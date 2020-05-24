@@ -3,7 +3,7 @@ const { validate, parseValidation } = require('../services/ValidationService')
 
 module.exports = (api) => {
   api.get('/health', AuthController.healthcheck)
-  api.get('/xx', AuthController.xx)
+  api.get('/zz', AuthController.zz)
   api.post(
     '/signup',
     validate('signup'),
