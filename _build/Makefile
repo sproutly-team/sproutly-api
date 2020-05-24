@@ -53,6 +53,7 @@ export NODE_RUNNER = ${REGISTRY_ADDRESS}runner${TAG_NAME}
 build: node
 
 node:
+	aws ecr get-login --no-include-email --region "eu-west-2"
 	docker build -f ./Dockerfile -t ${NODE_RUNNER} .
 	docker tag ${NODE_RUNNER} app/runner
 	$(call push_image,${NODE_RUNNER})
