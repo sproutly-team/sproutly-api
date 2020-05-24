@@ -1,12 +1,3 @@
-variable "access_key" {
-
-}
-variable "secret_key" {
-
-}
-variable "region" {
-
-}
 
 variable "image_name" {
   description = "Name of Docker image"
@@ -55,15 +46,6 @@ variable "rds-port" {
   description = "Postgres port"
   default     = 5432
 }
-
-variable "rds-username" {
-  description = "Postgres Username"
-}
-
-variable "rds-password" {
-  description = "Postgres Password"
-}
-
 
 variable "hash_script" {
   description = "Path to script to generate hash of source contents"
