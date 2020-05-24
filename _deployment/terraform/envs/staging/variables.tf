@@ -47,6 +47,17 @@ variable "rds-port" {
   default     = 5432
 }
 
+variable "rds-username" {
+  description = "Postgres Username"
+  default     = ""
+}
+
+variable "rds-password" {
+  description = "Postgres Password"
+  default     = ""
+}
+
+
 variable "hash_script" {
   description = "Path to script to generate hash of source contents"
   default     = ""

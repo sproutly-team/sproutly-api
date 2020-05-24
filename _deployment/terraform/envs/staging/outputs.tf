@@ -7,8 +7,3 @@ output "tag" {
   description = "Docker image tag"
   value       = "${var.tag}"
 }
-
-output "hash" {
-  description = "Docker image source hash"
-  value       = "${lookup(data.external.hash.result, "hash")}"
-}
