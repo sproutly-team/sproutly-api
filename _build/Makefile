@@ -57,4 +57,4 @@ node:
 	docker tag ${NODE_RUNNER} app/runner
 	$(call push_image,${NODE_RUNNER})
 
-echo("::set-output name=image::$NODE_RUNNER")
+echo "set-output name=image::$NODE_RUNNER"
