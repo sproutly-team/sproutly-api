@@ -16,7 +16,7 @@ export REGISTRY_ADDRESS = 069127369227.dkr.ecr.eu-west-2.amazonaws.com/sproutlya
 $(info registry is $(REGISTRY_ADDRESS))
 
 # don't tag, don't use remote registry for local development
-ifeq ($(CI_SERVER), no)q
+ifeq ($(CI_SERVER), no)
 	REGISTRY_ADDRESS =
 	TAG_NAME =
 endif
