@@ -14,36 +14,36 @@
       },
       "portMappings": [
         {
-          "containerPort": "4000",
-          "hostPort": "4000",
+          "containerPort": "${app_port}",
+          "hostPort": "${app_port}",
           "protocol": "tcp"
         }
-      ]
+      ],
+      "cpu": "1",
+      "environment": [
+        {
+          "name": "NODE_ENV",
+          "value": "staging"
+        },
+        {
+          "name": "PORT",
+          "value": "4000"
+        },
+        {
+          "name": "DB",
+          "valueFrom": "arn:aws:secretsmanager:eu-west-2:069127369227:secret:sproutly/staging/database-qTh79J"
+        }
+      ],
+      "ulimits": [
+        {
+          "name": "nofile",
+          "softLimit": 65536,
+          "hardLimit": 65536
+        }
+      ],
+      "mountPoints": [],
+      "memory": 2048,
+      "volumesFrom": []
     }
-  ],
-  "cpu": 1,
-  "environment": [
-    {
-      "name": "NODE_ENV",
-      "value": "staging"
-    },
-    {
-      "name": "PORT",
-      "value": "4000"
-    },
-    {
-      "name": "DB",
-      "valueFrom": "arn:aws:secretsmanager:eu-west-2:069127369227:secret:sproutly/staging/database-qTh79J"
-    }
-  ],
-  "ulimits": [
-    {
-      "name": "nofile",
-      "softLimit": 65536,
-      "hardLimit": 65536
-    }
-  ],
-  "mountPoints": [],
-  "memory": 2048,
-  "volumesFrom": []
+  ]
 }
