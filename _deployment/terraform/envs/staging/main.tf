@@ -201,7 +201,7 @@ resource "aws_ecs_task_definition" "service" {
   cpu                      = 256
   memory                   = 2048
   requires_compatibilities = ["FARGATE"]
-  container_definitions = data.template_file.sproutlyapp.rendered
+  container_definitions    = data.template_file.sproutlyapp.rendered
   tags = {
     Environment = "staging"
     Application = "sproutlyapi"
@@ -286,8 +286,8 @@ resource "aws_db_instance" "postgresql" {
   engine_version         = "11.6"
   instance_class         = "db.t2.micro"
   name                   = "sproutly"
-  username               = var.rds-username
-  password               = var.rds-password
+  username               = jsondecode(data.aws_secretsmanager_secret_version.db.secret_string)["username"]
+  password               = jsondecode(data.aws_secretsmanager_secret_version.db.secret_string)["password"]
   vpc_security_group_ids = [aws_security_group.rds-sg.id]
 }
 
