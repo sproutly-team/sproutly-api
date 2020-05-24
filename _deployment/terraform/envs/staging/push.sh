@@ -20,7 +20,6 @@ tag="${3:-latest}"
 region="$(echo "$repository_url" | cut -d. -f4)"
 image_name="$(echo "$repository_url" | cut -d/ -f2)"
 
-
 (cd "$source_path" && docker build -t "$image_name" .)
 
 $(aws ecr get-login --no-include-email --region "$region")
