@@ -1,4 +1,4 @@
-const BaseError = require('./BaseError')
+const BaseError = require('./BaseError');
 
 /**
  * Constructor.
@@ -8,16 +8,16 @@ const BaseError = require('./BaseError')
  */
 class ValidateError extends BaseError {
   constructor(value) {
-    const message = `the following fields are missing ${JSON.stringify(value)}`
+    const message = `the following fields are missing ${JSON.stringify(value)}`;
     const properties = {
       status: 422,
       code: 'validation_error'
-    }
-    super(message, properties)
+    };
+    super(message, properties);
 
-    this.message = message
-    this.name = this.constructor.name
+    this.message = message;
+    this.name = this.constructor.name;
   }
 }
 
-module.exports = ValidateError
+module.exports = ValidateError;

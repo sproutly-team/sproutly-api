@@ -1,8 +1,8 @@
-const { isEmpty } = require('lodash')
-const { check, validationResult } = require('express-validator')
+const { isEmpty } = require('lodash');
+const { check, validationResult } = require('express-validator');
 
-const ResponseService = require('./ResponseService')
-const ValidateError = require('../errors/ValidateError')
+const ResponseService = require('./ResponseService');
+const ValidateError = require('../errors/ValidateError');
 
 // Validates api input data. Register route validation here
 exports.validate = (method) => {
@@ -27,18 +27,18 @@ exports.validate = (method) => {
           .isEmpty()
           .trim()
           .escape()
-      ]
+      ];
     }
     default:
-      return []
+      return [];
   }
-}
+};
 
 // Middleware to parse validation response from validate method
 exports.parseValidation = (req, res, next) => {
-  const error = validationResult(req)
+  const error = validationResult(req);
   if (!isEmpty(error.errors)) {
-    ResponseService.json(res, new ValidateError(error))
+    ResponseService.json(res, new ValidateError(error));
   }
-  next()
-}
+  next();
+};

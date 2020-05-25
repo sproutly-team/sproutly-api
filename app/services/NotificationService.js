@@ -1,4 +1,4 @@
-const MailerService = require('./MailerService')
+const MailerService = require('./MailerService');
 
 const service = {
   async newSignup({ email, code, firstname }) {
@@ -6,10 +6,10 @@ const service = {
       to: email,
       subject: 'Welcome to Sproutly',
       payload: `Hi ${firstname}, Welcome to Sproutly. Your Confirmation Code is ${code}. Please click the link below (coming soon) to complete onboarding`
-    }
+    };
 
-    await MailerService.send(mailPayload)
+    await MailerService.send(mailPayload);
   }
-}
+};
 
-module.exports = service
+module.exports = service;

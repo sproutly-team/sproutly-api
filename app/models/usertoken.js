@@ -18,14 +18,14 @@ module.exports = (sequelize, DataTypes) => {
       }
     },
     {}
-  )
+  );
 
   UserToken.associate = function(models) {
     UserToken.belongsTo(models.User, {
       foreignKey: 'userId',
       as: 'user'
-    })
-  }
+    });
+  };
 
-  return UserToken
-}
+  return UserToken;
+};

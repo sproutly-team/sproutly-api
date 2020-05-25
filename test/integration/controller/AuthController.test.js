@@ -1,7 +1,7 @@
-require('chai').should()
+require('chai').should();
 
-const request = require('supertest')
-const app = require('../../../app')
+const request = require('supertest');
+const app = require('../../../app');
 
 describe('POST /signup', () => {
   it('should return Sign User successfully', async () => {
@@ -14,13 +14,13 @@ describe('POST /signup', () => {
         password: 'password'
       })
       .expect(200)
-      .expect('Content-Type', /json/)
+      .expect('Content-Type', /json/);
 
-    const { message, data } = response
+    const { message, data } = response;
 
-    message.should.be.eql('Successfully Signed Up')
-    data.email.should.eql('sproutlyowner50@gmail.com')
-    data.role.should.eql('businessOwner')
-    data.authenticated.should.eql(false)
-  })
-})
+    message.should.be.eql('Successfully Signed Up');
+    data.email.should.eql('sproutlyowner50@gmail.com');
+    data.role.should.eql('businessOwner');
+    data.authenticated.should.eql(false);
+  });
+});

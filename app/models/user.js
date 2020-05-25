@@ -1,5 +1,5 @@
-const bcrypt = require('bcryptjs')
-const Sequelize = require('sequelize')
+const bcrypt = require('bcryptjs');
+const Sequelize = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
   const User = sequelize.define(
@@ -54,20 +54,20 @@ module.exports = (sequelize, DataTypes) => {
         }
       ]
     }
-  )
+  );
 
   User.beforeCreate(
     (user) =>
       new Promise((resolve) => {
-        user.password = bcrypt.hashSync(user.password, 8)
-        return resolve(user)
+        user.password = bcrypt.hashSync(user.password, 8);
+        return resolve(user);
       })
-  )
+  );
 
   User.associate = function(models) {
-    User.hasMany(models.UserToken, { as: 'user' })
+    User.hasMany(models.UserToken, { as: 'user' });
     // associations can be defined here
-  }
+  };
 
-  return User
-}
+  return User;
+};

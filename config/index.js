@@ -1,6 +1,6 @@
-const dotenv = require('dotenv')
+const dotenv = require('dotenv');
 
-dotenv.config({ path: '.env' })
+dotenv.config({ path: '.env' });
 
 module.exports = {
   env: process.env.NODE_ENV || 'development',
@@ -32,4 +32,4 @@ module.exports = {
     url: process.env.DATABASE_URL,
     dialect: 'postgres'
   }
-}
+};

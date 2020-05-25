@@ -2,7 +2,7 @@ module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.sequelize.query(
       'CREATE EXTENSION IF NOT EXISTS "uuid-ossp";'
-    )
+    );
     await queryInterface.createTable('Users', {
       id: {
         allowNull: false,
@@ -51,7 +51,7 @@ module.exports = {
         type: Sequelize.DATE,
         defaultValue: Sequelize.fn('NOW')
       }
-    })
+    });
   },
   down: (queryInterface) => queryInterface.dropTable('Users')
-}
+};

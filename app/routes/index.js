@@ -1,9 +1,9 @@
-const AuthRoutes = require('./auth')
+const AuthRoutes = require('./auth');
 
 module.exports = (express) => {
-  const api = express.Router()
+  const api = express.Router();
 
-  AuthRoutes(api)
+  AuthRoutes(api);
 
-  return api
-}
+  return api;
+};
