@@ -27,9 +27,9 @@ const controller = {
     try {
       const inputs = req.body;
 
-      inputs.email = inputs.email.toLower();
-      inputs.firstname = inputs.email.toLower();
-      inputs.lastname = inputs.email.toLower();
+      inputs.email = inputs.email.toLowerCase();
+      inputs.firstname = inputs.email.toLowerCase();
+      inputs.lastname = inputs.email.toLowerCase();
 
       const signupDetails = {
         ...inputs,
