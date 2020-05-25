@@ -4,6 +4,7 @@ const logger = require('morgan')
 const errorHandler = require('errorhandler')
 const lusca = require('lusca')
 const expressStatusMonitor = require('express-status-monitor')
+const Logger = require('./services/LogService')
 
 const models = require('./models/index')
 
@@ -32,6 +33,8 @@ module.exports = (app, express) => {
 
   app.listen(app.get('port'), async () => {
     await models.sequelize.sync()
+    Logger.info('Sproutly API running')
+    // eslint-disable-next-line no-console
     console.log(
       'App is running at port %s in %s mode',
       app.get('port'),

@@ -43,6 +43,14 @@
       {
         "name": "DB_USER",
         "value": "${db_user}"
+      },
+       {
+        "name": "LOGGLY_TOKEN",
+        "value": "${loggly_token}"
+      },
+       {
+        "name": "LOGGLY_SUBDOMAIN",
+        "value": "${loggly_subdomain}"
       }
     ],
     "ulimits": [

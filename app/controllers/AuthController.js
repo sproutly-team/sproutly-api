@@ -1,6 +1,7 @@
 const ResponseService = require('../services/ResponseService')
 const NotificationService = require('../services/NotificationService')
 const UtilService = require('../services/UtilService')
+const Logger = require('../services/LogService')
 
 const EntityExistsError = require('../errors/EntityExistsError')
 const { User, UserToken } = require('../models')
@@ -25,11 +26,17 @@ const controller = {
   async signup(req, res) {
     try {
       const inputs = req.body
+
+      inputs.email = inputs.email.toLower()
+      inputs.firstname = inputs.email.toLower()
+      inputs.lastname = inputs.email.toLower()
+
       const signupDetails = {
         ...inputs,
         role: 'businessOwner'
       }
 
+      Logger.info(`Checking if email ${inputs.email} exists already`)
       const existingUser = await User.findOne({
         where: {
           email: inputs.email,
@@ -38,6 +45,7 @@ const controller = {
       })
 
       if (existingUser) {
+        Logger.error(`User with email ${existingUser.email} alrady exists`)
         return ResponseService.json(
           res,
           new EntityExistsError('user', existingUser.email)
@@ -53,13 +61,17 @@ const controller = {
         userId: newUser.id
       }
 
+      Logger.info(`User registered and token sent successfully`)
       await UserToken.create(tokenDetails)
 
       const { firstname, email } = newUser
+
+      Logger.info(`Notification Sent`)
       await NotificationService.newSignup({ email, firstname, code: authToken })
 
       return ResponseService.json(res, 200, 'Successfully Signed Up', newUser)
     } catch (err) {
+      Logger.error(`Error occured while signing up: ${err.message}`)
       return ResponseService.json(res, err)
     }
   }

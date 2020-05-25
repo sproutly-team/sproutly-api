@@ -27,8 +27,17 @@ data "aws_secretsmanager_secret" "db" {
   arn = "arn:aws:secretsmanager:eu-west-2:069127369227:secret:sproutly/staging/database-qTh79J"
 }
 
+data "aws_secretsmanager_secret" "log" {
+  arn = "arn:aws:secretsmanager:eu-west-2:069127369227:secret:sproutly/staging/loggly-FVxZgA"
+}
+
+
 data "aws_secretsmanager_secret_version" "db" {
   secret_id = "${data.aws_secretsmanager_secret.db.id}"
+}
+
+data "aws_secretsmanager_secret_version" "log" {
+  secret_id = "${data.aws_secretsmanager_secret.log.id}"
 }
 
 resource "aws_cloudwatch_log_group" "sproutlyapi" {
@@ -190,6 +199,8 @@ data "template_file" "sproutlyapp" {
     db_host            = aws_db_instance.postgresql.address
     db_user            = jsondecode(data.aws_secretsmanager_secret_version.db.secret_string)["username"]
     db_password        = jsondecode(data.aws_secretsmanager_secret_version.db.secret_string)["password"]
+    loggly_token       = jsondecode(data.aws_secretsmanager_secret_version.log.secret_string)["token"]
+    loggly_subdomain   = jsondecode(data.aws_secretsmanager_secret_version.log.secret_string)["subdomain"]
   }
 }
 

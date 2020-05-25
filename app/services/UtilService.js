@@ -1,4 +1,9 @@
 const service = {
+  isDev() {
+    const env = process.env.NODE_ENV
+    return !env || env === 'development' || env === 'test'
+  },
+
   randomGenerator(length) {
     const arr = [2, 3, 4, 5, 6, 7, 8, 9]
     let i = 0
