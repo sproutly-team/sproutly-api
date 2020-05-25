@@ -57,8 +57,8 @@ module.exports = (sequelize, DataTypes) => {
   );
 
   User.beforeCreate(
-    (user) =>
-      new Promise((resolve) => {
+    user =>
+      new Promise(resolve => {
         user.password = bcrypt.hashSync(user.password, 8);
         return resolve(user);
       })

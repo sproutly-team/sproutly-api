@@ -5,7 +5,7 @@ const ResponseService = require('./ResponseService');
 const ValidateError = require('../errors/ValidateError');
 
 // Validates api input data. Register route validation here
-exports.validate = (method) => {
+exports.validate = method => {
   switch (method) {
     case 'signup': {
       return [

@@ -7,16 +7,10 @@ module.exports = {
   },
   extends: ['airbnb-base', 'plugin:prettier/recommended'],
   rules: {
-    'prettier/prettier': [
-      'error',
-      {
-        singleQuote: true,
-        semi: true
-      }
-    ],
+    'prettier/prettier': ['error'],
     camelcase: 'off',
     'no-param-reassign': 'off',
     'no-underscore-dangle': 'off',
     'func-names': 'off'
   }
-}
+};
