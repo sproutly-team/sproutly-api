@@ -3,8 +3,7 @@ module.exports = {
     es6: true,
     node: true
   },
-  plugins: ['prettier'],
-  extends: ['airbnb-base', 'prettier'],
+  extends: ['airbnb-base', 'plugin:prettier/recommended'],
   rules: {
     'prettier/prettier': [
       'error',
