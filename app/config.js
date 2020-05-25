@@ -7,6 +7,7 @@ const expressStatusMonitor = require('express-status-monitor')
 const Logger = require('./services/LogService')
 
 const models = require('./models/index')
+const routes = require('./routes')
 
 module.exports = (app, express) => {
   app.set('host', process.env.OPENSHIFT_NODEJS_IP || '0.0.0.0')
@@ -15,7 +16,7 @@ module.exports = (app, express) => {
   app.use(bodyParser.json())
   app.use(bodyParser.urlencoded({ extended: true }))
 
-  const api = require('./routes')(express)
+  const api = routes(express)
   app.use('/api', api)
 
   app.use(expressStatusMonitor())

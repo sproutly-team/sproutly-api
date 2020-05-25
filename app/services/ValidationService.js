@@ -1,7 +1,7 @@
 const { isEmpty } = require('lodash')
 const { check, validationResult } = require('express-validator')
 
-const ResponseService = require('../services/ResponseService')
+const ResponseService = require('./ResponseService')
 const ValidateError = require('../errors/ValidateError')
 
 // Validates api input data. Register route validation here
@@ -29,6 +29,8 @@ exports.validate = (method) => {
           .escape()
       ]
     }
+    default:
+      return []
   }
 }
 

@@ -61,12 +61,12 @@ const controller = {
         userId: newUser.id
       }
 
-      Logger.info(`User registered and token sent successfully`)
+      Logger.info('User registered and token sent successfully')
       await UserToken.create(tokenDetails)
 
       const { firstname, email } = newUser
 
-      Logger.info(`Notification Sent`)
+      Logger.info('Notification Sent')
       await NotificationService.newSignup({ email, firstname, code: authToken })
 
       return ResponseService.json(res, 200, 'Successfully Signed Up', newUser)

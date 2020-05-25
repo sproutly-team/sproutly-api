@@ -1,5 +1,3 @@
-'use strict'
-
 const bcrypt = require('bcryptjs')
 const Sequelize = require('sequelize')
 
@@ -58,12 +56,13 @@ module.exports = (sequelize, DataTypes) => {
     }
   )
 
-  User.beforeCreate(function(user) {
-    return new Promise((resolve, reject) => {
-      user.password = bcrypt.hashSync(user.password, 8)
-      return resolve(user)
-    })
-  })
+  User.beforeCreate(
+    (user) =>
+      new Promise((resolve) => {
+        user.password = bcrypt.hashSync(user.password, 8)
+        return resolve(user)
+      })
+  )
 
   User.associate = function(models) {
     User.hasMany(models.UserToken, { as: 'user' })

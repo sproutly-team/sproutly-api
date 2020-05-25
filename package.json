@@ -14,12 +14,14 @@
   "scripts": {
     "start": "nodemon app/index.js",
     "test": "NODE_ENV=test npx nyc --reporter=html mocha test/**/**/*.test.js",
-    "lint": "eslint \"**/*.js\""
+    "lint": "eslint . --ext .js --max-warnings=0 --report-unused-disable-directives && echo '✔  Your .js,.ts files look good.'",
+    "lint-fix": "eslint --fix --ext .js, ."
   },
   "dependencies": {
     "@sendgrid/mail": "^7.1.0",
     "axios": "^0.19.2",
     "bcryptjs": "^2.4.3",
+    "bluebird": "^3.7.2",
     "body-parser": "^1.19.0",
     "compression": "^1.7.4",
     "dotenv": "^8.2.0",
@@ -46,14 +48,14 @@
   "devDependencies": {
     "chai": "^4.2.0",
     "eslint": "^6.8.0",
-    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-config-airbnb-base": "^14.1.0",
     "eslint-plugin-chai-friendly": "^0.5.0",
-    "eslint-plugin-import": "^2.20.1",
+    "eslint-plugin-import": "^2.20.2",
     "mocha": "^7.1.0",
+    "nodemon": "^2.0.3",
     "nyc": "^15.0.0",
     "sinon": "^9.0.0",
-    "supertest": "^5.0.0-0",
-    "nodemon": "^2.0.3"
+    "supertest": "^5.0.0-0"
   },
   "engines": {
     "node": ">=10.19.0",

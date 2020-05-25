@@ -1,7 +1,6 @@
-'use strict'
 module.exports = {
-  up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('UserTokens', {
+  up: (queryInterface, Sequelize) =>
+    queryInterface.createTable('UserTokens', {
       id: {
         allowNull: false,
         primaryKey: true,
@@ -29,9 +28,6 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DATE
       }
-    })
-  },
-  down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('UserTokens')
-  }
+    }),
+  down: (queryInterface) => queryInterface.dropTable('UserTokens')
 }

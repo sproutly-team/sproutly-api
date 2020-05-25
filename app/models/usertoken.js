@@ -1,5 +1,3 @@
-'use strict'
-
 module.exports = (sequelize, DataTypes) => {
   const UserToken = sequelize.define(
     'UserToken',

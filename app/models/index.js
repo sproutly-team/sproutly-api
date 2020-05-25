@@ -1,11 +1,10 @@
-'use strict'
-
 // This holds settings for sequelize. Please dont tamper with
 
 const fs = require('fs')
 const path = require('path')
 const bluebird = require('bluebird')
 const Sequelize = require('sequelize')
+
 const basename = path.basename(__filename)
 const env = process.env.NODE_ENV || 'development'
 const config = require('../../config/index')[env]
@@ -25,11 +24,10 @@ if (config.url) {
 }
 
 fs.readdirSync(__dirname)
-  .filter((file) => {
-    return (
+  .filter(
+    (file) =>
       file.indexOf('.') !== 0 && file !== basename && file.slice(-3) === '.js'
-    )
-  })
+  )
   .forEach((file) => {
     // eslint-disable-next-line dot-notation
     const model = sequelize['import'](path.join(__dirname, file))

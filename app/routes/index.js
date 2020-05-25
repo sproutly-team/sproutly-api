@@ -1,7 +1,9 @@
+const AuthRoutes = require('./auth')
+
 module.exports = (express) => {
   const api = express.Router()
 
-  require('./auth')(api)
+  AuthRoutes(api)
 
   return api
 }

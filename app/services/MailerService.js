@@ -1,5 +1,6 @@
 const sgMail = require('@sendgrid/mail')
 const isHtml = require('is-html')
+const Logger = require('./LogService')
 
 class Service {
   constructor() {
@@ -14,11 +15,13 @@ class Service {
       from: process.env.MAIL_SENDER
     }
 
-    isHtml(payload) ? (msg.html = payload) : (msg.text = payload)
+    if (isHtml(payload)) msg.html = payload
+    else msg.text = payload
+
     try {
       await this.mailer.send(msg)
     } catch (err) {
-      console.log(`error occured while sending mail: ${err.message}`)
+      Logger.error(`error occured while sending mail: ${err.message}`)
     }
   }
 }
