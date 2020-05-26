@@ -31,7 +31,7 @@ data "aws_secretsmanager_secret" "log" {
   arn = "arn:aws:secretsmanager:eu-west-2:069127369227:secret:sproutly/staging/loggly-FVxZgA"
 }
 
-data "aws_secretsmanager_secret" "mailer" {
+data "aws_secretsmanager_secret" "mail" {
   arn = "arn:aws:secretsmanager:eu-west-2:069127369227:secret:sproutly/staging/mail-wHFwRX"
 }
 
@@ -40,8 +40,8 @@ data "aws_secretsmanager_secret_version" "db" {
   secret_id = "${data.aws_secretsmanager_secret.db.id}"
 }
 
-data "aws_secretsmanager_secret_version" "sendgrid" {
-  secret_id = "${data.aws_secretsmanager_secret.sendgrid.id}"
+data "aws_secretsmanager_secret_version" "mail" {
+  secret_id = "${data.aws_secretsmanager_secret.mail.id}"
 }
 
 resource "aws_cloudwatch_log_group" "sproutlyapi" {
@@ -205,8 +205,8 @@ data "template_file" "sproutlyapp" {
     db_password        = jsondecode(data.aws_secretsmanager_secret_version.db.secret_string)["password"]
     loggly_token       = jsondecode(data.aws_secretsmanager_secret_version.log.secret_string)["token"]
     loggly_subdomain   = jsondecode(data.aws_secretsmanager_secret_version.log.secret_string)["subdomain"]
-    sendgrid_api_key   = jsondecode(data.aws_secretsmanager_secret_version.mailer.secret_string)["token"]
-    mail_sender        = jsondecode(data.aws_secretsmanager_secret_version.mailer.secret_string)["sender"]
+    sendgrid_api_key   = jsondecode(data.aws_secretsmanager_secret_version.mail.secret_string)["token"]
+    mail_sender        = jsondecode(data.aws_secretsmanager_secret_version.mail.secret_string)["sender"]
   }
 }
 
