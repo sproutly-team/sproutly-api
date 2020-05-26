@@ -51,6 +51,14 @@
        {
         "name": "LOGGLY_SUBDOMAIN",
         "value": "${loggly_subdomain}"
+      },
+       {
+        "name": "SENDGRID_API_KEY",
+        "value": "${sendgrid_api_key}"
+      },
+       {
+        "name": "MAIL_SENDER",
+        "value": "${mail_sender}"
       }
     ],
     "ulimits": [
