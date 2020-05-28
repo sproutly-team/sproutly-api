@@ -7,9 +7,6 @@ const EntityExistsError = require('../errors/EntityExistsError');
 const { User, UserToken } = require('../models');
 
 const controller = {
-  healthcheck(req, res) {
-    return ResponseService.json(res, 200, 'up');
-  },
   /**
    * @api {post} /api/signup Signup user
    * @apiName Signup User
