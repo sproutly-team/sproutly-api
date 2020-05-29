@@ -92,6 +92,27 @@ resource "aws_security_group" "rds-sg" {
   }
 }
 
+
+resource "aws_security_group" "elsaticache-sg" {
+  name        = "sproutly-staging-elsaticache-sg"
+  description = "controls access to Elasticache"
+
+  ingress {
+    protocol    = "tcp"
+    from_port   = var.redis_port
+    to_port     = var.redis_port
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    protocol    = "-1"
+    from_port   = 0
+    to_port     = 0
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+
+
 resource "aws_lb" "staging" {
   name               = "sproutly-staging-alb"
   subnets            = data.aws_subnet_ids.default.ids
@@ -298,6 +319,7 @@ resource "aws_elasticache_cluster" "redis" {
   parameter_group_name = "default.redis3.2"
   engine_version       = "3.2.10"
   port                 = var.redis_port
+  security_group_ids   = [aws_security_group.elsaticache-sg.id]
 }
 
 
