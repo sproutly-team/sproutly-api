@@ -34,7 +34,7 @@ exports.isUnauthenticated = (req, res, next) => {
           return ResponseService.json(res, 200, 'Already Authenticated');
         });
 
-        return next();
+        return undefined;
       }
       return next();
     }
