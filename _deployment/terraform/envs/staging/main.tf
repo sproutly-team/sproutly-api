@@ -201,16 +201,8 @@ data "template_file" "sproutlyapp" {
     app_port           = var.app_port
     db_port            = aws_db_instance.postgresql.port
     db_host            = aws_db_instance.postgresql.address
-    db_user            = jsondecode(data.aws_secretsmanager_secret_version.db.secret_string)["username"]
-    db_password        = jsondecode(data.aws_secretsmanager_secret_version.db.secret_string)["password"]
-    loggly_token       = jsondecode(data.aws_secretsmanager_secret_version.log.secret_string)["token"]
-    loggly_subdomain   = jsondecode(data.aws_secretsmanager_secret_version.log.secret_string)["subdomain"]
-    sendgrid_api_key   = jsondecode(data.aws_secretsmanager_secret_version.mail.secret_string)["token"]
-    mail_sender        = jsondecode(data.aws_secretsmanager_secret_version.mail.secret_string)["sender"]
     redis_port         = aws_elasticache_cluster.redis.cache_nodes.0.port
     redis_host         = aws_elasticache_cluster.redis.cache_nodes.0.address
-    redis_password     = jsondecode(data.aws_secretsmanager_secret_version.redis.secret_string)["password"]
-    jwt_secret         = jsondecode(data.aws_secretsmanager_secret_version.jwt.secret_string)["secret"]
   }
 }
 

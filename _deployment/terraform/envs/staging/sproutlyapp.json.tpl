@@ -27,42 +27,16 @@
       {
         "name": "PORT",
         "value": "4000"
-      }
-    ],
-    "secrets":[
-         {
+      }, 
+       {
         "name": "DB_HOST",
         "value": "${db_host}"
       },
-       {
+      {
         "name": "DB_PORT",
         "value": "${db_port}"
       },
       {
-        "name": "DB_PASSWORD",
-        "value": "${db_password}"
-      },
-      {
-        "name": "DB_USER",
-        "value": "${db_user}"
-      },
-       {
-        "name": "LOGGLY_TOKEN",
-        "value": "${loggly_token}"
-      },
-       {
-        "name": "LOGGLY_SUBDOMAIN",
-        "value": "${loggly_subdomain}"
-      },
-       {
-        "name": "SENDGRID_API_KEY",
-        "value": "${sendgrid_api_key}"
-      },
-       {
-        "name": "MAIL_SENDER",
-        "value": "${mail_sender}"
-      },
-       {
         "name": "REDIS_PORT",
         "value": "${redis_port}"
       },
@@ -70,13 +44,40 @@
         "name": "REDIS_HOST",
         "value": "${redis_host}"
       },
+
+    ],
+    "secrets":[
+      {
+        "name": "DB_PASSWORD",
+        "valueFrom": "arn:aws:secretsmanager:eu-west-2:069127369227:secret:sproutly/staging/database-qTh79J:password::"
+      },
+      {
+        "name": "DB_USER",
+        "valueFrom": "arn:aws:secretsmanager:eu-west-2:069127369227:secret:sproutly/staging/database-qTh79J:username::"
+      },
+       {
+        "name": "LOGGLY_TOKEN",
+        "valueFrom": "arn:aws:secretsmanager:eu-west-2:069127369227:secret:sproutly/staging/loggly-FVxZgA:token::"
+      },
+       {
+        "name": "LOGGLY_SUBDOMAIN",
+        "valueFrom": "arn:aws:secretsmanager:eu-west-2:069127369227:secret:sproutly/staging/loggly-FVxZgA:subdomain::"
+      },
+       {
+        "name": "SENDGRID_API_KEY",
+        "valueFrom": "arn:aws:secretsmanager:eu-west-2:069127369227:secret:sproutly/staging/mail-wHFwRX:token::"
+      },
+       {
+        "name": "MAIL_SENDER",
+        "valueFrom": "arn:aws:secretsmanager:eu-west-2:069127369227:secret:sproutly/staging/mail-wHFwRX:sender::"
+      },
       {
         "name": "REDIS_PASSWORD",
-        "value": "${redis_password}"
+        "valueFrom": "arn:aws:secretsmanager:eu-west-2:069127369227:secret:sproutly/staging/redis-VCvkQl:password::"
       },
        {
         "name": "JWT_SECRET",
-        "value": "${jwt_secret}"
+        "valueFrom": "arn:aws:secretsmanager:eu-west-2:069127369227:secret:sproutly/staging/jwt-TunaRf:secret::"
       }
     ],
     "ulimits": [
