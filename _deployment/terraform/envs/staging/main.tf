@@ -22,6 +22,14 @@ data "aws_subnet_ids" "default" {
   vpc_id = data.aws_vpc.default.id
 }
 
+data "aws_secretsmanager_secret" "db" {
+  arn = "arn:aws:secretsmanager:eu-west-2:069127369227:secret:sproutly/staging/database-qTh79J"
+}
+
+data "aws_secretsmanager_secret_version" "db" {
+  secret_id = "${data.aws_secretsmanager_secret.db.id}"
+}
+
 
 resource "aws_cloudwatch_log_group" "sproutlyapi" {
   name = "awslogs-sproutlyapi-staging"
