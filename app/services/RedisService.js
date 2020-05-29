@@ -11,6 +11,7 @@ function init() {
   const client = redis.createClient({
     host,
     port,
+    password,
     no_ready_check: true
   });
 

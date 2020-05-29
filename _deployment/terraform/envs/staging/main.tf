@@ -19,7 +19,7 @@ data "aws_vpc" "default" {
 
 
 data "aws_subnet_ids" "default" {
-  vpc_id = "${data.aws_vpc.default.id}"
+  vpc_id = data.aws_vpc.default.id
 }
 
 
@@ -291,7 +291,7 @@ resource "aws_db_instance" "postgresql" {
 }
 
 resource "aws_elasticache_cluster" "redis" {
-  cluster_id           = "${var.redis_cluster_id}"
+  cluster_id           = var.redis_cluster_id
   engine               = "redis"
   node_type            = "cache.t2.micro"
   num_cache_nodes      = 1
