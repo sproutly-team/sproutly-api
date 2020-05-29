@@ -43,8 +43,7 @@
        {
         "name": "REDIS_HOST",
         "value": "${redis_host}"
-      },
-
+      }
     ],
     "secrets":[
       {
