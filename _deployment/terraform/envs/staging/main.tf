@@ -17,16 +17,9 @@ data "aws_vpc" "default" {
   default = true
 }
 
+
 data "aws_subnet_ids" "default" {
   vpc_id = data.aws_vpc.default.id
-}
-
-data "aws_secretsmanager_secret" "db" {
-  arn = "arn:aws:secretsmanager:eu-west-2:069127369227:secret:sproutly/staging/database-qTh79J"
-}
-
-data "aws_secretsmanager_secret_version" "db" {
-  secret_id = data.aws_secretsmanager_secret.db.id
 }
 
 
@@ -165,59 +158,32 @@ resource "aws_lb_target_group" "staging" {
 }
 
 
+
+// IAM Roles
+data "aws_iam_policy_document" "ecs_task_execution_role" {
+  version = "2012-10-17"
+  statement {
+    sid     = ""
+    effect  = "Allow"
+    actions = ["sts:AssumeRole"]
+
+    principals {
+      type        = "Service"
+      identifiers = ["ecs-tasks.amazonaws.com"]
+    }
+  }
+}
+
 # ECS task execution role
 resource "aws_iam_role" "ecs_task_execution_role" {
-  name = var.ecs_task_execution_role_name
-
-  assume_role_policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Sid": "",
-      "Effect": "Allow",
-      "Principal": {
-        "Service": "ecs-tasks.amazonaws.com"
-      },
-      "Action": "sts:AssumeRole"
-    }
-  ]
-}
-    EOF
+  name               = var.ecs_task_execution_role_name
+  assume_role_policy = data.aws_iam_policy_document.ecs_task_execution_role.json
 }
 
-
-
-resource "aws_iam_role_policy" "ecs_task_execution_policy" {
-  name = "ecs_sproutly_task_execution_policy"
-  role = aws_iam_role.ecs_task_execution_role.name
-
-  policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Action": [
-        "secretsmanager:GetSecretValue"
-      ],
-      "Resource": "*"
-    },
-    {
-      "Effect": "Allow",
-      "Action": [
-        "ecr:GetAuthorizationToken",
-        "ecr:BatchCheckLayerAvailability",
-        "ecr:GetDownloadUrlForLayer",
-        "ecr:BatchGetImage",
-        "logs:CreateLogStream",
-        "logs:PutLogEvents"
-      ],
-      "Resource": "*"
-    }
-  ]
-}
-EOF
+# ECS task execution role policy attachment
+resource "aws_iam_role_policy_attachment" "ecs_task_execution_role" {
+  role       = aws_iam_role.ecs_task_execution_role.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
 }
 
 
@@ -235,8 +201,14 @@ data "template_file" "sproutlyapp" {
     app_port           = var.app_port
     db_port            = aws_db_instance.postgresql.port
     db_host            = aws_db_instance.postgresql.address
+    loggly_token       = jsondecode(data.aws_secretsmanager_secret_version.log.secret_string)["token"]
+    loggly_subdomain   = jsondecode(data.aws_secretsmanager_secret_version.log.secret_string)["subdomain"]
+    sendgrid_api_key   = jsondecode(data.aws_secretsmanager_secret_version.mail.secret_string)["token"]
+    mail_sender        = jsondecode(data.aws_secretsmanager_secret_version.mail.secret_string)["sender"]
     redis_port         = aws_elasticache_cluster.redis.cache_nodes.0.port
     redis_host         = aws_elasticache_cluster.redis.cache_nodes.0.address
+    redis_password     = jsondecode(data.aws_secretsmanager_secret_version.redis.secret_string)["password"]
+    jwt_secret         = jsondecode(data.aws_secretsmanager_secret_version.jwt.secret_string)["secret"]
   }
 }
 
@@ -257,12 +229,11 @@ resource "aws_ecs_task_definition" "service" {
 
 
 resource "aws_ecs_service" "staging" {
-  name                               = "staging"
-  cluster                            = aws_ecs_cluster.staging.id
-  task_definition                    = aws_ecs_task_definition.service.arn
-  desired_count                      = 1
-  launch_type                        = "FARGATE"
-
+  name            = "staging"
+  cluster         = aws_ecs_cluster.staging.id
+  task_definition = aws_ecs_task_definition.service.arn
+  desired_count   = 1
+  launch_type     = "FARGATE"
 
   network_configuration {
     security_groups  = [aws_security_group.ecs_tasks.id]
@@ -276,7 +247,7 @@ resource "aws_ecs_service" "staging" {
     container_port   = var.app_port
   }
 
-  depends_on = [aws_lb_listener.https_forward, aws_iam_role_policy.ecs_task_execution_policy]
+  depends_on = [aws_lb_listener.https_forward, aws_iam_role_policy_attachment.ecs_task_execution_role]
 
   tags = {
     Environment = "staging"
