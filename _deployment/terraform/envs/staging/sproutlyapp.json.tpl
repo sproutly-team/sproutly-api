@@ -48,35 +48,35 @@
     "secrets":[
       {
         "name": "DB_PASSWORD",
-        "valueFrom": "arn:aws:secretsmanager:eu-west-2:069127369227:secret:sproutly/staging/database-qTh79J:password::"
+        "valueFrom": "arn:aws:secretsmanager:eu-west-2:069127369227:secret:sproutly/staging/database-qTh79J:password"
       },
       {
         "name": "DB_USER",
-        "valueFrom": "arn:aws:secretsmanager:eu-west-2:069127369227:secret:sproutly/staging/database-qTh79J:username::"
+        "valueFrom": "arn:aws:secretsmanager:eu-west-2:069127369227:secret:sproutly/staging/database-qTh79J:username"
       },
        {
         "name": "LOGGLY_TOKEN",
-        "valueFrom": "arn:aws:secretsmanager:eu-west-2:069127369227:secret:sproutly/staging/loggly-FVxZgA:token::"
+        "valueFrom": "arn:aws:secretsmanager:eu-west-2:069127369227:secret:sproutly/staging/loggly-FVxZgA:token"
       },
        {
         "name": "LOGGLY_SUBDOMAIN",
-        "valueFrom": "arn:aws:secretsmanager:eu-west-2:069127369227:secret:sproutly/staging/loggly-FVxZgA:subdomain::"
+        "valueFrom": "arn:aws:secretsmanager:eu-west-2:069127369227:secret:sproutly/staging/loggly-FVxZgA:subdomain"
       },
        {
         "name": "SENDGRID_API_KEY",
-        "valueFrom": "arn:aws:secretsmanager:eu-west-2:069127369227:secret:sproutly/staging/mail-wHFwRX:token::"
+        "valueFrom": "arn:aws:secretsmanager:eu-west-2:069127369227:secret:sproutly/staging/mail-wHFwRX:token"
       },
        {
         "name": "MAIL_SENDER",
-        "valueFrom": "arn:aws:secretsmanager:eu-west-2:069127369227:secret:sproutly/staging/mail-wHFwRX:sender::"
+        "valueFrom": "arn:aws:secretsmanager:eu-west-2:069127369227:secret:sproutly/staging/mail-wHFwRX:sender"
       },
       {
         "name": "REDIS_PASSWORD",
-        "valueFrom": "arn:aws:secretsmanager:eu-west-2:069127369227:secret:sproutly/staging/redis-VCvkQl:password::"
+        "valueFrom": "arn:aws:secretsmanager:eu-west-2:069127369227:secret:sproutly/staging/redis-VCvkQl:password"
       },
        {
         "name": "JWT_SECRET",
-        "valueFrom": "arn:aws:secretsmanager:eu-west-2:069127369227:secret:sproutly/staging/jwt-TunaRf:secret::"
+        "valueFrom": "arn:aws:secretsmanager:eu-west-2:069127369227:secret:sproutly/staging/jwt-TunaRf:secret"
       }
     ],
     "ulimits": [
