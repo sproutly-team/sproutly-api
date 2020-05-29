@@ -17,7 +17,6 @@ data "aws_vpc" "default" {
   default = true
 }
 
-
 data "aws_subnet_ids" "default" {
   vpc_id = data.aws_vpc.default.id
 }
@@ -27,7 +26,7 @@ data "aws_secretsmanager_secret" "db" {
 }
 
 data "aws_secretsmanager_secret_version" "db" {
-  secret_id = "${data.aws_secretsmanager_secret.db.id}"
+  secret_id = data.aws_secretsmanager_secret.db.id
 }
 
 
