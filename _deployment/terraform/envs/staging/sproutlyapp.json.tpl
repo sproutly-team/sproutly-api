@@ -30,47 +30,47 @@
       },
        {
         "name": "DB_HOST",
-        "valueFrom": "${db_host}"
+        "value": "${db_host}"
       },
        {
         "name": "DB_PORT",
-        "valueFrom": "${db_port}"
+        "value": "${db_port}"
       },
       {
         "name": "DB_PASSWORD",
-        "valueFrom": "${db_password}"
+        "value": "${db_password}"
       },
       {
         "name": "DB_USER",
-        "valueFrom": "${db_user}"
+        "value": "${db_user}"
       },
        {
         "name": "LOGGLY_TOKEN",
-        "valueFrom": "${loggly_token}"
+        "value": "${loggly_token}"
       },
        {
         "name": "LOGGLY_SUBDOMAIN",
-        "valueFrom": "${loggly_subdomain}"
+        "value": "${loggly_subdomain}"
       },
        {
         "name": "SENDGRID_API_KEY",
-        "valueFrom": "${sendgrid_api_key}"
+        "value": "${sendgrid_api_key}"
       },
        {
         "name": "MAIL_SENDER",
-        "valueFrom": "${mail_sender}"
+        "value": "${mail_sender}"
       },
        {
         "name": "REDIS_PORT",
-        "valueFrom": "${redis_port}"
+        "value": "${redis_port}"
       },
        {
         "name": "REDIS_HOST",
-        "valueFrom": "${redis_host}"
+        "value": "${redis_host}"
       },
       {
         "name": "REDIS_PASSWORD",
-        "valueFrom": "${redis_password}"
+        "value": "${redis_password}"
       },
        {
         "name": "JWT_SECRET",
