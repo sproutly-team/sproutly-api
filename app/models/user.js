@@ -1,6 +1,5 @@
 const bcrypt = require('bcryptjs');
 const Sequelize = require('sequelize');
-const JwtService = require('../services/JwtService');
 
 module.exports = (sequelize, DataTypes) => {
   const User = sequelize.define(
@@ -80,7 +79,7 @@ module.exports = (sequelize, DataTypes) => {
   };
 
   User.prototype.toJSON = function() {
-    var values = Object.assign({}, this.get());
+    const values = { ...this.get() };
     delete values.password;
     return values;
   };

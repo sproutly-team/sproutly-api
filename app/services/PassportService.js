@@ -13,7 +13,6 @@ module.exports = () => {
         }
       });
 
-
       if (_.isEmpty(user) || user.isDeleted) {
         return done(null, false, `email (${email}) does not exist`);
       }
@@ -21,7 +20,6 @@ module.exports = () => {
       if (!user.validatePassword(password)) {
         return done(null, false, 'Incorrect Password');
       }
-
 
       return done(null, user);
     } catch (err) {

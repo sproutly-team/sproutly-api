@@ -1,5 +1,6 @@
-const { isEmpty } = require('lodash');
 const redis = require('redis');
+const { isEmpty } = require('lodash');
+const Logger = require('./LogService');
 
 const env = process.env.NODE_ENV || 'development';
 const { host, port, password } = require('../../config')[env].redis;
@@ -15,9 +16,7 @@ function init() {
 
   if (!isEmpty(password)) client.authAsync(password);
 
-  client.on('connect', () => {
-    console.log(`Redis connected on ${port}`);
-  });
+  client.on('connect', () => Logger.info(`Redis connected on ${port}`));
 
   return client;
 }

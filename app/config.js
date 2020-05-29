@@ -4,9 +4,9 @@ const logger = require('morgan');
 const errorHandler = require('errorhandler');
 const lusca = require('lusca');
 const passport = require('passport');
-const PassportService = require('./services/PassportService')();
 const expressStatusMonitor = require('express-status-monitor');
 const Logger = require('./services/LogService');
+const PassportService = require('./services/PassportService');
 
 const models = require('./models/index');
 const routes = require('./routes');
@@ -29,7 +29,7 @@ module.exports = (app, express) => {
   app.use(lusca.xssProtection(true));
   app.disable('x-powered-by');
   app.use(passport.initialize());
-
+  PassportService();
 
   if (process.env.NODE_ENV === 'development') {
     // only use in development
