@@ -27,10 +27,8 @@
       {
         "name": "PORT",
         "value": "4000"
-      }
-    ],
-    "secrets":[
-         {
+      },
+       {
         "name": "DB_HOST",
         "valueFrom": "${db_host}"
       },

@@ -201,6 +201,8 @@ data "template_file" "sproutlyapp" {
     app_port           = var.app_port
     db_port            = aws_db_instance.postgresql.port
     db_host            = aws_db_instance.postgresql.address
+    db_user            = jsondecode(data.aws_secretsmanager_secret_version.db.secret_string)["user"]
+    db_password        = jsondecode(data.aws_secretsmanager_secret_version.db.secret_string)["password"]
     loggly_token       = jsondecode(data.aws_secretsmanager_secret_version.log.secret_string)["token"]
     loggly_subdomain   = jsondecode(data.aws_secretsmanager_secret_version.log.secret_string)["subdomain"]
     sendgrid_api_key   = jsondecode(data.aws_secretsmanager_secret_version.mail.secret_string)["token"]
