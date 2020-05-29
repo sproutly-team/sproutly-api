@@ -5,14 +5,17 @@ services:
       context: .
     command: npm start
     volumes:
-      - .:/usr/app/
-      - /usr/app/node_modules
+      - .:/usr/src/app/
+      - /usr/src/app/node_modules
     ports:
       - '4000:4000'
     depends_on:
       - db
-    environment: 
+    environment:
       DB_HOST: db
+      REDIS_HOST: redis
+      
+
   db:
     build:
       context: _deployment/postgres
@@ -22,4 +25,9 @@ services:
 
     ports:
       - 5432:5432
-      
+
+  redis:
+    build:
+      context: _deployment/redis
+    ports:
+      - 6379:6379

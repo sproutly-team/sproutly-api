@@ -29,6 +29,18 @@ exports.validate = method => {
           .escape()
       ];
     }
+    case 'login': {
+      return [
+        check('email')
+          .isEmail()
+          .normalizeEmail(),
+        check('password')
+          .not()
+          .isEmpty()
+          .trim()
+          .escape()
+      ];
+    }
     default:
       return [];
   }

@@ -20,6 +20,16 @@ variable "http_port" {
   default     = 80
 }
 
+variable "redis_cluster_id" {
+  description = "Name of Elasticache redis cluster"
+  default     = "sproutly-redis"
+}
+
+variable "redis_port" {
+  description = "Elasticache port"
+  default     = 6379
+}
+
 variable "health_check_path" {
   description = "Health Check"
   default     = "/api/health"

@@ -23,27 +23,6 @@ data "aws_subnet_ids" "default" {
 }
 
 
-data "aws_secretsmanager_secret" "db" {
-  arn = "arn:aws:secretsmanager:eu-west-2:069127369227:secret:sproutly/staging/database-qTh79J"
-}
-
-data "aws_secretsmanager_secret" "log" {
-  arn = "arn:aws:secretsmanager:eu-west-2:069127369227:secret:sproutly/staging/loggly-FVxZgA"
-}
-
-data "aws_secretsmanager_secret" "mail" {
-  arn = "arn:aws:secretsmanager:eu-west-2:069127369227:secret:sproutly/staging/mail-wHFwRX"
-}
-
-
-data "aws_secretsmanager_secret_version" "db" {
-  secret_id = "${data.aws_secretsmanager_secret.db.id}"
-}
-
-data "aws_secretsmanager_secret_version" "mail" {
-  secret_id = "${data.aws_secretsmanager_secret.mail.id}"
-}
-
 resource "aws_cloudwatch_log_group" "sproutlyapi" {
   name = "awslogs-sproutlyapi-staging"
 
@@ -207,6 +186,9 @@ data "template_file" "sproutlyapp" {
     loggly_subdomain   = jsondecode(data.aws_secretsmanager_secret_version.log.secret_string)["subdomain"]
     sendgrid_api_key   = jsondecode(data.aws_secretsmanager_secret_version.mail.secret_string)["token"]
     mail_sender        = jsondecode(data.aws_secretsmanager_secret_version.mail.secret_string)["sender"]
+    redis_port         = aws_db_instance.aws_elasticache_cluster.redis.cache_nodes.0.port
+    redis_host         = aws_db_instance.aws_elasticache_cluster.redis.cache_nodes.0.address
+    redis_password     = jsondecode(data.aws_secretsmanager_secret_version.redis.secret_string)["password"]
   }
 }
 
@@ -306,6 +288,16 @@ resource "aws_db_instance" "postgresql" {
   username               = jsondecode(data.aws_secretsmanager_secret_version.db.secret_string)["username"]
   password               = jsondecode(data.aws_secretsmanager_secret_version.db.secret_string)["password"]
   vpc_security_group_ids = [aws_security_group.rds-sg.id]
+}
+
+resource "aws_elasticache_cluster" "redis" {
+  cluster_id           = "${var.redis_cluster_id}"
+  engine               = "redis"
+  node_type            = "cache.t2.micro"
+  num_cache_nodes      = 1
+  parameter_group_name = "default.redis3.2"
+  engine_version       = "3.2.10"
+  port                 = var.redis_port
 }
 
 

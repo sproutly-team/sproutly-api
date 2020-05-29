@@ -59,6 +59,18 @@
        {
         "name": "MAIL_SENDER",
         "value": "${mail_sender}"
+      },
+       {
+        "name": "REDIS_PORT",
+        "value": "${redis_port}"
+      },
+       {
+        "name": "REDIS_HOST",
+        "value": "${redis_host}"
+      },
+      {
+        "name": "REDIS_PASSWORD",
+        "value": "${redis_password}"
       }
     ],
     "ulimits": [

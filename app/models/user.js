@@ -1,5 +1,6 @@
 const bcrypt = require('bcryptjs');
 const Sequelize = require('sequelize');
+const JwtService = require('../services/JwtService');
 
 module.exports = (sequelize, DataTypes) => {
   const User = sequelize.define(
@@ -52,7 +53,12 @@ module.exports = (sequelize, DataTypes) => {
           unique: true,
           fields: ['email']
         }
-      ]
+      ],
+      scopes: {
+        hidden: {
+          attributes: { exclude: ['password'] }
+        }
+      }
     }
   );
 
@@ -67,6 +73,16 @@ module.exports = (sequelize, DataTypes) => {
   User.associate = function(models) {
     User.hasMany(models.UserToken, { as: 'user' });
     // associations can be defined here
+  };
+
+  User.prototype.validatePassword = function(password) {
+    return bcrypt.compareSync(password, this.password);
+  };
+
+  User.prototype.toJSON = function() {
+    var values = Object.assign({}, this.get());
+    delete values.password;
+    return values;
   };
 
   return User;

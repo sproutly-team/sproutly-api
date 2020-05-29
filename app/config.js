@@ -3,6 +3,8 @@ const bodyParser = require('body-parser');
 const logger = require('morgan');
 const errorHandler = require('errorhandler');
 const lusca = require('lusca');
+const passport = require('passport');
+const PassportService = require('./services/PassportService')();
 const expressStatusMonitor = require('express-status-monitor');
 const Logger = require('./services/LogService');
 
@@ -26,6 +28,8 @@ module.exports = (app, express) => {
   app.use(lusca.xframe('SAMEORIGIN'));
   app.use(lusca.xssProtection(true));
   app.disable('x-powered-by');
+  app.use(passport.initialize());
+
 
   if (process.env.NODE_ENV === 'development') {
     // only use in development
