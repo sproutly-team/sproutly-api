@@ -236,11 +236,6 @@ resource "aws_ecs_service" "staging" {
   desired_count   = 1
   launch_type     = "FARGATE"
 
-
-  deployment_maximum_percent         = 100
-  deployment_minimum_healthy_percent = 0
-  health_check_grace_period_seconds  = 600
-
   network_configuration {
     security_groups  = [aws_security_group.ecs_tasks.id]
     subnets          = data.aws_subnet_ids.default.ids
@@ -251,10 +246,6 @@ resource "aws_ecs_service" "staging" {
     target_group_arn = aws_lb_target_group.staging.arn
     container_name   = "sproutlyapi"
     container_port   = var.app_port
-  }
-
-  lifecycle {
-    ignore_changes = ["desired_count"]
   }
 
   depends_on = [aws_lb_listener.https_forward, aws_iam_role_policy_attachment.ecs_task_execution_role]
