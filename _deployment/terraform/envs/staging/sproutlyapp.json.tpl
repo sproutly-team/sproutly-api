@@ -27,8 +27,10 @@
       {
         "name": "PORT",
         "value": "4000"
-      },
-       {
+      }
+    ],
+    "secrets":[
+         {
         "name": "DB_HOST",
         "value": "${db_host}"
       },
@@ -71,6 +73,10 @@
       {
         "name": "REDIS_PASSWORD",
         "value": "${redis_password}"
+      },
+       {
+        "name": "JWT_SECRET",
+        "value": "${jwt_secret}"
       }
     ],
     "ulimits": [

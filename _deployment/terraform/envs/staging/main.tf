@@ -210,6 +210,7 @@ data "template_file" "sproutlyapp" {
     redis_port         = aws_elasticache_cluster.redis.cache_nodes.0.port
     redis_host         = aws_elasticache_cluster.redis.cache_nodes.0.address
     redis_password     = jsondecode(data.aws_secretsmanager_secret_version.redis.secret_string)["password"]
+    jwt_secret         = jsondecode(data.aws_secretsmanager_secret_version.jwt.secret_string)["secret"]
   }
 }
 
