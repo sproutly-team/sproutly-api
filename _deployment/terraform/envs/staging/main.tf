@@ -236,6 +236,10 @@ resource "aws_ecs_service" "staging" {
   desired_count   = 1
   launch_type     = "FARGATE"
 
+  deployment_maximum_percent         = 100
+  deployment_minimum_healthy_percent = 0
+  health_check_grace_period_seconds  = 600
+
   network_configuration {
     security_groups  = [aws_security_group.ecs_tasks.id]
     subnets          = data.aws_subnet_ids.default.ids
