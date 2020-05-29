@@ -173,7 +173,7 @@ resource "aws_ecs_cluster" "staging" {
 data "template_file" "sproutlyapp" {
   template = file("./sproutlyapp.json.tpl")
 
-  depends_on = [aws_db_instance.postgresql]
+  depends_on = [aws_db_instance.postgresql, aws_elasticache_cluster.redis]
   vars = {
     aws_ecr_repository = aws_ecr_repository.repo.repository_url
     tag                = var.tag
@@ -186,8 +186,8 @@ data "template_file" "sproutlyapp" {
     loggly_subdomain   = jsondecode(data.aws_secretsmanager_secret_version.log.secret_string)["subdomain"]
     sendgrid_api_key   = jsondecode(data.aws_secretsmanager_secret_version.mail.secret_string)["token"]
     mail_sender        = jsondecode(data.aws_secretsmanager_secret_version.mail.secret_string)["sender"]
-    redis_port         = aws_db_instance.aws_elasticache_cluster.redis.cache_nodes.0.port
-    redis_host         = aws_db_instance.aws_elasticache_cluster.redis.cache_nodes.0.address
+    redis_port         = aws_elasticache_cluster.redis.cache_nodes.0.port
+    redis_host         = aws_elasticache_cluster.redis.cache_nodes.0.address
     redis_password     = jsondecode(data.aws_secretsmanager_secret_version.redis.secret_string)["password"]
   }
 }
